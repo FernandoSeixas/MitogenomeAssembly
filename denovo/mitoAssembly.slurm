@@ -22,10 +22,6 @@ READM=$(($READS/1000000))
 export READM=$READM
 
 
-#/ load modules and start mamba env
-module load python/3.10.9-fasrc01
-mamba activate abyss-env
-
 ## go to individual folder
 mkdir $INDIVIDUAL.mitoAssembly
 cd $INDIVIDUAL.mitoAssembly
