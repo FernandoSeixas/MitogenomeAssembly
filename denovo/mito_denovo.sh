@@ -13,7 +13,7 @@ reads=10000000      ; export reads=$reads
 mkcov=10            ; export mkcov=$mkcov
 
 
-## launch mitobim
+## subset reads and launch ABySS
 cat identifiers.txt | xargs -n 1 sh -c '
     sbatch mitoAssembly.slurm \
     $0.r1.fastq.gz \
