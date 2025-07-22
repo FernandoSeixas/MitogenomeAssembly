@@ -24,18 +24,22 @@ cat identifiers.txt | xargs -n 1 sh -c '
 '
 
 ## Collect all mitogenomes 
-rm mitobim.fasta; touch mitobim.fasta
-for prefix in `cat identifiers.txt `; do 
-    lfolder=$(ls -d $prefix.mitobim/iteration* | sort -Vr | head -n 1)
-    printf "%s\n" ">$prefix" >> mitobim.fasta
-    cat ${lfolder}/*_noIUPAC.fasta | grep -v "_bb_" >> mitobim.fasta
-done
+rm mitoassembly.fasta
+touch mitoassembly.fasta
+# for prefix in `cat identifiers.txt `; do 
+#     lfolder=$(ls -d $prefix.mitobim/iteration* | sort -Vr | head -n 1)
+#     printf "%s\n" ">$prefix" >> mitobim.fasta
+#     cat ${lfolder}/*_noIUPAC.fasta | grep -v "_bb_" >> mitoassembly.fasta
+# done
 
 ## Reverse complement sequences if necessary
 perl revcom.pl \
-    mitobim.fasta \
-    mitobim.rc.fasta
+    mitoassembly.fasta \
+    mitoassembly.rc.fasta
+
+## Left align sequences with MARS - so that all sequences star/end at the same position
+mars -a DNA -i mitoassembly.rc.fasta -o mitoassembly.mars.fasta -a DNA --method 1 -T 16
 
 ## Align with mafft
-mafft --maxiterate 1000 --thread 8 mitobim.rc.fasta > mitobim.mafft.fasta
+mafft --maxiterate 1000 --thread 8 mitoassembly.mars.fasta > mitoassembly.mafft.fasta
 
